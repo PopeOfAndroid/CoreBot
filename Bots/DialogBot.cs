@@ -1,0 +1,93 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using CoreBot;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Schema;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.BotBuilderSamples
+{
+    // This IBot implementation can run any type of Dialog. The use of type parameterization is to allows multiple different bots
+    // to be run at different endpoints within the same project. This can be achieved by defining distinct Controller types
+    // each with dependency on distinct IBot types, this way ASP Dependency Injection can glue everything together without ambiguity.
+    // The ConversationState is used by the Dialog system. The UserState isn't, however, it might have been used in a Dialog implementation,
+    // and the requirement is that all BotState objects are saved at the end of a turn.
+    public class DialogBot<T> : ActivityHandler where T : Dialog 
+    {
+        /// <summary>
+        /// The <see cref="DialogSet"/> that contains all the Dialogs that can be used at runtime.
+        /// </summary>
+        
+        //new bot
+        private readonly DialogSet _dialogs;
+        private const string DialogId = "question";
+
+        //oldbot
+        protected readonly Dialog _dialog;
+        protected readonly BotState _conversationState;
+        protected readonly BotState _userState;
+        protected readonly ILogger _logger;
+
+        public DialogBot(ConversationState conversationState, UserState userState, T dialog, ILogger<DialogBot<T>> logger)
+        {    
+            //old bot
+            _conversationState = conversationState;
+            _userState = userState;
+            _dialog = dialog;
+            _logger = logger;
+        }
+
+        public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
+        {
+            const string welcomeOption = "Los Gehts";
+            const string quickRepliesOption = "Quick Replies";
+            const string postBackOption = "PostBack";
+
+            //get responseMessage from User
+            var responseMessage = turnContext.Activity.Text;
+
+            //send message to User
+            if (responseMessage == "Los Gehts")
+            {
+                // Initially the bot offers to showcase 3 Facebook features: Quick replies, PostBack and getting the Facebook Page Name.
+                // Below we also show how to get the messaging_optin payload separately as well.
+                switch (turnContext.Activity.Text)
+                {
+                    // By default we offer the users different actions that the bot supports, through quick replies.
+                    case welcomeOption:
+                        {
+                            var reply = turnContext.Activity.CreateReply("What Facebook feature would you like to try? Here are some quick replies to choose from!");
+                            reply.SuggestedActions = new SuggestedActions()
+                            {
+                                Actions = new List<CardAction>()
+                                {
+                                    new CardAction() { Title = quickRepliesOption, Type = ActionTypes.PostBack, Value = quickRepliesOption },
+                                    new CardAction() { Title = postBackOption, Type = ActionTypes.PostBack, Value = postBackOption },
+                                },
+                            };
+                            await turnContext.SendActivityAsync(reply);
+                            break;
+                        }
+                }
+            }
+
+            // Save any state changes that might have occured during the turn.
+            await _conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
+        }
+
+        protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Running dialog with Message Activity.");
+
+            // Run the Dialog with the new message Activity.
+            await _dialog.Run(turnContext, _conversationState.CreateProperty<DialogState>("DialogState"), cancellationToken);
+        }
+    }
+}
