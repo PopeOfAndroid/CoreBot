@@ -46,7 +46,7 @@ namespace Microsoft.BotBuilderSamples
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {
             const string welcomeOption = "Los Gehts";
-            const string quickRepliesOption = "Quick Replies";
+            const string podcastOption = "Zum Podcast";
             const string homePageOption = "Zur Homepage";
 
             //get responseMessage from User
@@ -60,12 +60,12 @@ namespace Microsoft.BotBuilderSamples
                     // By default we offer the users different actions that the bot supports, through quick replies.
                     case welcomeOption:
                         {
-                            var reply = turnContext.Activity.CreateReply("What Facebook feature would you like to try? Here are some quick replies to choose from!");
+                            var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren");
                             reply.SuggestedActions = new SuggestedActions()
                             {
                                 Actions = new List<CardAction>()
                                 {
-                                    new CardAction() { Title = quickRepliesOption, Type = ActionTypes.PostBack, Value = quickRepliesOption },
+                                    new CardAction() { Title = podcastOption, Type = ActionTypes.PostBack, Value = podcastOption },
                                     new CardAction() { Title = homePageOption, Type = ActionTypes.PostBack, Value = homePageOption },
                                 },
                             };
@@ -76,6 +76,13 @@ namespace Microsoft.BotBuilderSamples
                     case homePageOption:
                         {
                             var reply = turnContext.Activity.CreateReply($"https://geheime-mentoren.de/");
+                            await turnContext.SendActivityAsync(reply);
+                            break;
+                        }
+
+                    case podcastOption:
+                        {
+                            var reply = turnContext.Activity.CreateReply($"https://podcast-generationsbilder.podigee.io/5-neue-episode");
                             await turnContext.SendActivityAsync(reply);
                             break;
                         }
