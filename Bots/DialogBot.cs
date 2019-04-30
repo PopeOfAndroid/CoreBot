@@ -52,8 +52,6 @@ namespace Microsoft.BotBuilderSamples
             //get responseMessage from User
             var responseMessage = turnContext.Activity.Text;
 
-            //send message to User
-            if (responseMessage == "Los Gehts")
             {
                 // Initially the bot offers to showcase 3 Facebook features: Quick replies, PostBack and getting the Facebook Page Name.
                 // Below we also show how to get the messaging_optin payload separately as well.
