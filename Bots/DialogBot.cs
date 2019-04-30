@@ -47,7 +47,7 @@ namespace Microsoft.BotBuilderSamples
         {
             const string welcomeOption = "Los Gehts";
             const string quickRepliesOption = "Quick Replies";
-            const string postBackOption = "PostBack";
+            const string homePageOption = "Zur Homepage";
 
             //get responseMessage from User
             var responseMessage = turnContext.Activity.Text;
@@ -68,9 +68,16 @@ namespace Microsoft.BotBuilderSamples
                                 Actions = new List<CardAction>()
                                 {
                                     new CardAction() { Title = quickRepliesOption, Type = ActionTypes.PostBack, Value = quickRepliesOption },
-                                    new CardAction() { Title = postBackOption, Type = ActionTypes.PostBack, Value = postBackOption },
+                                    new CardAction() { Title = homePageOption, Type = ActionTypes.PostBack, Value = homePageOption },
                                 },
                             };
+                            await turnContext.SendActivityAsync(reply);
+                            break;
+                        }
+
+                    case homePageOption:
+                        {
+                            var reply = turnContext.Activity.CreateReply($"https://geheime-mentoren.de/");
                             await turnContext.SendActivityAsync(reply);
                             break;
                         }
