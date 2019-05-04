@@ -1,0 +1,59 @@
+﻿@model CoreBot.Models.SettingsViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+    <div class="container">
+        <h1 class="display-4">Livestream</h1>
+        <div class="row">
+            <div class="col-6">
+                <div>
+                    <p>Erstelle einen neuen Livestream-Broadcast</p>
+                </div>
+                @using (Html.BeginForm("BroadCastAsync", "settings", FormMethod.Post))
+                {
+                    <form>
+                        <div class="form-group row">
+                            <label for="Message" class="col-sm-2 col-form-label">Message:</label>
+                            <div class="col-sm-5">
+                                @Html.TextBoxFor(model => model.Message, null, new {Class="form-control"})
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="buttonText" class="col-sm-2 col-form-label">ButtonText:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="buttonText" placeholder="ButtonText">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="url" class="col-sm-2 col-form-label">Url:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="url" placeholder="url">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="date" class="col-sm-2 col-form-label">Datum:</label>
+                            <div class="col-sm-5">
+                                <input type="date" class="form-control" id="date">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="time" class="col-sm-2 col-form-label">Uhrzeit.</label>
+                            <div class="col-sm-5">
+                                <input type="time" class="form-control" id="time">
+                            </div>
+                        </div>
+                        <button type="submit" value="Index" class="btn btn-primary">Submit</button>
+                    </form>
+                }
+            </div>
+                <div class="col-6">
+                    <div>
+                        @{
+                            <p>geplante Livestreams: </p> @Html.DisplayFor(model=> model.Message)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
