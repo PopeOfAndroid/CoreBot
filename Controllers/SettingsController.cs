@@ -46,7 +46,7 @@ namespace CoreBot.Controllers
 
                     await broadcast.SendBroadCastAsync(something);
                 }
-                return Redirect("https://www.facebook.com/messages/t/Vegane.KochApp");
+                return Redirect("https://www.facebook.com/");
             }
             return View("Index");
         }
