@@ -26,13 +26,13 @@ namespace CoreBot.Controllers
             _broadCastUrlSend = $"{_facebookAPI}{pageID}/{_broadCastSendEndpoint}?access_token={accessToken}";
         }
 
-        public async Task<Tuple<int, string>> CreateBroadCastAsync(string broadCastText)
+        public async Task<Tuple<int, string>> CreateBroadCastAsync(SettingsViewModel settings)
         {
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var json = LiveStreamSerializer(broadCastText).ToString();
+                var json = LiveStreamSerializer(settings).ToString();
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -73,7 +73,7 @@ namespace CoreBot.Controllers
             }
         }
 
-        private string LiveStreamSerializer(string broadCastText)
+        private string LiveStreamSerializer(SettingsViewModel settings)
 
         {
             List<Button> buttons = new List<Button>()
@@ -83,14 +83,14 @@ namespace CoreBot.Controllers
 
                     type = "web_url",
                     url = "https://www.facebook.com/",
-                    title = "YES! Auf jeden Fall"
+                    title = settings.ButtonText
                 }
             };
         
             Payload payload = new Payload
             {
                 template_type = "button",
-                text = broadCastText,
+                text = settings.Message,
                 buttons = buttons
                 
             };
@@ -118,11 +118,11 @@ namespace CoreBot.Controllers
             return JsonConvert.SerializeObject(rootObject);
         }
 
-        public string StandardSerializer(string broadCastText)
+        public string StandardSerializer(SettingsViewModel settings)
 
         {
             DynamicText dynamicTexts = new DynamicText();
-            dynamicTexts.text = broadCastText;
+            dynamicTexts.text = settings.Message;
 
             List<Message> messages = new List<Message>()
                     {

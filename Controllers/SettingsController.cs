@@ -32,20 +32,23 @@ namespace CoreBot.Controllers
         [HttpPost]
         public async Task<IActionResult> BroadcastAsync(SettingsViewModel settings)
         {
-            string s1 = settings.Message;
-            Broadcast broadcast = new Broadcast("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", "572005723217414");
-            tuple = await broadcast.CreateBroadCastAsync(settings.Message);
-
-            if ((int)tuple.Item1 == 200)
+            if (ModelState.IsValid)
             {
-                var message_id = tuple.Item2;
+                Broadcast broadcast = new Broadcast("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", "572005723217414");
+                tuple = await broadcast.CreateBroadCastAsync(settings);
 
-                var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(message_id);
-                var something = Uri.EscapeUriString(jobj["message_creative_id"].ToString());
+                if ((int)tuple.Item1 == 200)
+                {
+                    var message_id = tuple.Item2;
 
-                await broadcast.SendBroadCastAsync(something);
+                    var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(message_id);
+                    var something = Uri.EscapeUriString(jobj["message_creative_id"].ToString());
+
+                    await broadcast.SendBroadCastAsync(something);
+                }
+                return Redirect("https://www.facebook.com/messages/t/Vegane.KochApp");
             }
-            return Redirect("https://www.facebook.com/messages/t/Vegane.KochApp");
+            return View("Index");
         }
     }
 }

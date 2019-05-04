@@ -3,57 +3,97 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-    <div class="container">
-        <h1 class="display-4">Livestream</h1>
-        <div class="row">
-            <div class="col-6">
-                <div>
-                    <p>Erstelle einen neuen Livestream-Broadcast</p>
+
+<head>
+    <link rel="stylesheet" href="~/vendor.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @@media only screen and (min-width:1025px) {
+            .customContainer {
+                width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        .background {
+            background-color: #E9EBEE;
+        }
+
+        .customNavBar {
+            background-color: #4267B2;
+            color:#FFFFFF;
+        }
+
+        .customNavItem:active {
+            color: #FFFFFF;
+        }
+    </style>
+
+</head>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+
+<body class="background">
+    <!-- A horizontal navbar that becomes vertical on small screens -->
+    <nav class="navbar navbar-expand-sm customNavBar">
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" style="color:#FFFFFF" href="@Url.Action("Index", "Settings")">Settings</a>
+            </li>
+        </ul>
+    </nav>
+    @using (Html.BeginForm("BroadCastAsync", "settings", FormMethod.Post))
+    {
+        <div class="customContainer">
+
+            <form class="border border-light">
+                <br />
+                <br />
+                <p class="h4 mb-4 p-10 pt-50">Neuen Livestream planen:</p>
+
+                <!-- Message -->
+                <div class="form-group">
+                    @Html.TextAreaFor(m => m.Message, 3, 30, new { placeholder = "Message", @class = "form-control rounded-0" })
+                    @Html.ValidationMessageFor(m => m.Message)
                 </div>
-                @using (Html.BeginForm("BroadCastAsync", "settings", FormMethod.Post))
-                {
-                    <form>
-                        <div class="form-group row">
-                            <label for="Message" class="col-sm-2 col-form-label">Message:</label>
-                            <div class="col-sm-5">
-                                @Html.TextBoxFor(model => model.Message, null, new {Class="form-control"})
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="buttonText" class="col-sm-2 col-form-label">ButtonText:</label>
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control" id="buttonText" placeholder="ButtonText">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="url" class="col-sm-2 col-form-label">Url:</label>
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control" id="url" placeholder="url">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="date" class="col-sm-2 col-form-label">Datum:</label>
-                            <div class="col-sm-5">
-                                <input type="date" class="form-control" id="date">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="time" class="col-sm-2 col-form-label">Uhrzeit.</label>
-                            <div class="col-sm-5">
-                                <input type="time" class="form-control" id="time">
-                            </div>
-                        </div>
-                        <button type="submit" value="Index" class="btn btn-primary">Submit</button>
-                    </form>
-                }
-            </div>
-                <div class="col-6">
-                    <div>
-                        @{
-                            <p>geplante Livestreams: </p> @Html.DisplayFor(model=> model.Message)
-                        }
-                    </div>
+
+                <!-- Name -->
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.ButtonText, null, new { placeholder = "Call To Action", @class = "form-control mb-4" })
+                    @Html.ValidationMessageFor(m => m.ButtonText)
                 </div>
-            </div>
+
+                <input type="text" class="form-control mb-4" id="url" placeholder="Ziel-Url">
+
+                <!-- Subject -->
+                <input type="text" class="form-control mb-4" id="date" placeholder="Datum">
+
+                <!-- Copy -->
+                <input type="text" class="form-control mb-4" id="time" placeholder="Uhrzeit">
+
+                <!-- Send button -->
+                <button class="btn btn-info btn-block" value="Index" type="submit">Send</button>
+            </form>
+            <!-- Default form contact -->
         </div>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    }
+    <script src="~/vendor.min.js"></script>
+</body>
+
+<link rel="stylesheet" href="@Url.Content("~/twitter-bootstrap/css/bootstrap.css")"/>
+
+<script>
+    $(document).ready(function () {
+        $("#date").focus(function () {
+            $(this).attr({ type: 'date' });
+        });
+
+        $("#time").focus(function () {
+            $(this).attr({ type: 'time' });
+        });
+    });
+</script>
