@@ -3,13 +3,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreBot;
+using CoreBot.Controllers;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -33,6 +36,7 @@ namespace Microsoft.BotBuilderSamples
         protected readonly BotState _conversationState;
         protected readonly BotState _userState;
         protected readonly ILogger _logger;
+        private Tuple<int, string> tuple;
 
         public DialogBot(ConversationState conversationState, UserState userState, T dialog, ILogger<DialogBot<T>> logger)
         {    
@@ -53,6 +57,23 @@ namespace Microsoft.BotBuilderSamples
             var responseMessage = turnContext.Activity.Text;
 
             {
+                var senderId = turnContext.Activity.ChannelData.ToString();
+                Regex rx = new Regex("[0-9]{16}");
+
+                MatchCollection matches = rx.Matches(senderId);
+                string PSID = matches[0].Value;
+
+                Label label = new Label();
+                tuple = await label.CreateLabel("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD");
+
+                if ((int)tuple.Item1 == 200)
+                {
+                    var label_id = tuple.Item2;
+
+                    await label.MatchLabelWithUser(PSID, label_id, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD");
+                }
+
+
                 // Initially the bot offers to showcase 3 Facebook features: Quick replies, PostBack and getting the Facebook Page Name.
                 // Below we also show how to get the messaging_optin payload separately as well.
                 switch (turnContext.Activity.Text)

@@ -38,6 +38,7 @@
         .customNavItem:active {
             color: #FFFFFF;
         }
+
     </style>
 
 </head>
@@ -76,8 +77,6 @@
                     @Html.TextBoxFor(m => m.ButtonText, null, new { placeholder = "Call To Action", @class = "form-control mb-4" })
                     @Html.ValidationMessageFor(m => m.ButtonText)
                 </div>
-
-                <input type="text" class="form-control mb-4" id="url" placeholder="Ziel-Url">
 
                 <!-- Subject -->
                 <input type="text" class="form-control mb-4" id="date" placeholder="Datum">
