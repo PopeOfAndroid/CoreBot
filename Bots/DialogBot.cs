@@ -71,6 +71,7 @@ namespace Microsoft.BotBuilderSamples
                 // Below we also show how to get the messaging_optin payload separately as well.
                 switch (something)
                 {
+
                     // By default we offer the users different actions that the bot supports, through quick replies.
                     case welcomeOption:
                        {                                               
