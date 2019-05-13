@@ -3,15 +3,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreBot;
 using CoreBot.Controllers;
+using CoreBot.Models;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.BotBuilderSamples
@@ -37,6 +40,9 @@ namespace Microsoft.BotBuilderSamples
         protected readonly BotState _userState;
         protected readonly ILogger _logger;
         private Tuple<int, string> tuple;
+        private Tuple<int, string> tuple2;
+        private Tuple<int, string> tuple3;
+        private Tuple<int, string> tuple4;
 
         public DialogBot(ConversationState conversationState, UserState userState, T dialog, ILogger<DialogBot<T>> logger)
         {    
@@ -49,38 +55,25 @@ namespace Microsoft.BotBuilderSamples
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {
-            const string welcomeOption = "Los Gehts";
+            const string welcomeOption = "Get%20Started";
             const string podcastOption = "Zum Podcast";
             const string homePageOption = "Zur Homepage";
 
-            //get responseMessage from User
             var responseMessage = turnContext.Activity.Text;
+            var userName = turnContext.Activity.From.Name;
+            var PSID = turnContext.Activity.From.Id;
+
+            var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(responseMessage);
+            var something = Uri.EscapeUriString(jobj["__button_text__"].ToString());
 
             {
-                var senderId = turnContext.Activity.ChannelData.ToString();
-                Regex rx = new Regex("[0-9]{16}");
-
-                MatchCollection matches = rx.Matches(senderId);
-                string PSID = matches[0].Value;
-
-                Label label = new Label();
-                tuple = await label.CreateLabel("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD");
-
-                if ((int)tuple.Item1 == 200)
-                {
-                    var label_id = tuple.Item2;
-
-                    await label.MatchLabelWithUser(PSID, label_id, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD");
-                }
-
-
                 // Initially the bot offers to showcase 3 Facebook features: Quick replies, PostBack and getting the Facebook Page Name.
                 // Below we also show how to get the messaging_optin payload separately as well.
-                switch (turnContext.Activity.Text)
+                switch (something)
                 {
                     // By default we offer the users different actions that the bot supports, through quick replies.
                     case welcomeOption:
-                        {
+                       {                                               
                             var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren");
                             reply.SuggestedActions = new SuggestedActions()
                             {
@@ -91,6 +84,7 @@ namespace Microsoft.BotBuilderSamples
                                 },
                             };
                             await turnContext.SendActivityAsync(reply);
+                            //await setLabelAsync(PSID, userName);
                             break;
                         }
 
@@ -121,6 +115,74 @@ namespace Microsoft.BotBuilderSamples
 
             // Run the Dialog with the new message Activity.
             await _dialog.Run(turnContext, _conversationState.CreateProperty<DialogState>("DialogState"), cancellationToken);
+        }
+
+        public async Task setLabelAsync(string PSID, string user)
+        {
+            /*
+            //PSID bekommen
+            Regex rx = new Regex("[0-9]{16}");
+            MatchCollection matches = rx.Matches(senderId);
+            string PSID = matches[0].Value;
+            */
+
+            //Überprüft was das Letzte Label ist
+            Label label = new Label();
+            tuple2 = await label.getAllLabels();
+
+            if ((int)tuple2.Item1 == 200)
+            {
+                //Checkt ob es schon ein Label gibt
+                var response = tuple2.Item2;
+                var labels = (RootObject2)Newtonsoft.Json.JsonConvert.DeserializeObject(response, typeof(RootObject2));
+
+                if (labels.data.Count == 0)
+                {
+                    //erstellt das 1. Label
+                    createLabelAsync(PSID, labels.data.Count.ToString(), user);
+                }
+                else
+                {
+                    //bekommt das aktuelle Label (labelData.name = eigene LabelId! -> nicht die von Facebook)
+                    var labelData = labels.data[0];
+                    tuple3 = await label.getLabelCount(labelData.name);
+
+                    if (tuple3.Item1 == 200)
+                    {
+                        var counter = tuple3.Item2;
+
+                        Regex rx = new Regex("[0-9]");
+                        MatchCollection matches = rx.Matches(counter);
+                        string counterString = matches[0].Value;
+
+                        int userCounter = Convert.ToInt32(counterString);
+
+                        //10.000 -> maximale Anzahl User für einen Broadcast
+                        if (userCounter < 10000)
+                        {
+                            await label.MatchLabelWithUser(PSID, labelData.id, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", user);
+                        }
+
+                        else
+                        {   //erstellt neues Label wenn 10.000 Menschen erreicht sind
+                            createLabelAsync(PSID, labels.data.Count.ToString(), user);
+                        }
+                    }
+                }
+            }
+        }
+
+        //labelName = label.data.Count -> zählt hoch
+        public async void createLabelAsync(string PSID, string labelName, string user)
+        {
+            Label label = new Label();
+            tuple4 = await label.CreateLabel("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD",labelName);
+            if ((int)tuple4.Item1 == 200)
+            {
+                var label_id = tuple4.Item2;
+
+                await label.MatchLabelWithUser(PSID, label_id, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", user);
+            }
         }
     }
 }
