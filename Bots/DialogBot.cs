@@ -59,17 +59,25 @@ namespace Microsoft.BotBuilderSamples
             const string podcastOption = "Zum Podcast";
             const string homePageOption = "Zur Homepage";
 
-            var responseMessage = turnContext.Activity.Text;
             var userName = turnContext.Activity.From.Name;
             var PSID = turnContext.Activity.From.Id;
+            var responsemessage = "";
 
-            var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(responseMessage);
-            var something = Uri.EscapeUriString(jobj["__button_text__"].ToString());
+            try
+            {
+                var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(turnContext.Activity.Text);
+                responsemessage = Uri.EscapeUriString(jobj["__button_text__"].ToString());
+            }
+            catch
+            {
+                 responsemessage = turnContext.Activity.Text;
+            }
+
 
             {
                 // Initially the bot offers to showcase 3 Facebook features: Quick replies, PostBack and getting the Facebook Page Name.
                 // Below we also show how to get the messaging_optin payload separately as well.
-                switch (something)
+                switch (responsemessage)
                 {
 
                     // By default we offer the users different actions that the bot supports, through quick replies.
@@ -85,7 +93,7 @@ namespace Microsoft.BotBuilderSamples
                                 },
                             };
                             await turnContext.SendActivityAsync(reply);
-                            //await setLabelAsync(PSID, userName);
+                            await setLabelAsync(PSID, userName);
                             break;
                         }
 
@@ -120,13 +128,6 @@ namespace Microsoft.BotBuilderSamples
 
         public async Task setLabelAsync(string PSID, string user)
         {
-            /*
-            //PSID bekommen
-            Regex rx = new Regex("[0-9]{16}");
-            MatchCollection matches = rx.Matches(senderId);
-            string PSID = matches[0].Value;
-            */
-
             //Überprüft was das Letzte Label ist
             Label label = new Label();
             tuple2 = await label.getAllLabels();
@@ -146,7 +147,7 @@ namespace Microsoft.BotBuilderSamples
                 {
                     //bekommt das aktuelle Label (labelData.name = eigene LabelId! -> nicht die von Facebook)
                     var labelData = labels.data[0];
-                    tuple3 = await label.getLabelCount(labelData.name);
+                    tuple3 = await label.getLabelCount(labelData.id);
 
                     if (tuple3.Item1 == 200)
                     {
@@ -180,9 +181,11 @@ namespace Microsoft.BotBuilderSamples
             tuple4 = await label.CreateLabel("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD",labelName);
             if ((int)tuple4.Item1 == 200)
             {
-                var label_id = tuple4.Item2;
+                var labelIdJson = tuple4.Item2;
+                string labelId = Regex.Replace(labelIdJson, "[^.0-9]*", "").ToString();
 
-                await label.MatchLabelWithUser(PSID, label_id, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", user);
+
+                await label.MatchLabelWithUser(PSID, labelId, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", user);
             }
         }
     }

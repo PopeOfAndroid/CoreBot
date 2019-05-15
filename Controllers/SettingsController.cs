@@ -15,6 +15,7 @@ namespace CoreBot.Controllers
     public class SettingsController : Controller
     {
         private Tuple<int, string> tuple;
+        private Tuple<int, string> tuple2;
 
         [HttpGet]
         public IActionResult Index()
@@ -34,17 +35,31 @@ namespace CoreBot.Controllers
         {
             if (ModelState.IsValid)
             {
-                Broadcast broadcast = new Broadcast("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", "572005723217414");
-                tuple = await broadcast.CreateBroadCastAsync(settings);
+                //check welche label es gibt
+                Label label = new Label();
+                tuple2 = await label.getAllLabels();
 
-                if ((int)tuple.Item1 == 200)
+                if ((int)tuple2.Item1 == 200)
                 {
-                    var message_id = tuple.Item2;
+                    //Checkt ob es schon ein Label gibt
+                    var response = tuple2.Item2;
+                    var labels = (RootObject2)Newtonsoft.Json.JsonConvert.DeserializeObject(response, typeof(RootObject2));
 
-                    var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(message_id);
-                    var something = Uri.EscapeUriString(jobj["message_creative_id"].ToString());
+                    for (int i = 0; i < labels.data.Count; i++)
+                    {
+                        Broadcast broadcast = new Broadcast("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", "572005723217414");
+                        tuple = await broadcast.CreateBroadCastAsync(settings);
 
-                    await broadcast.SendBroadCastAsync(something);
+                        if ((int)tuple.Item1 == 200)
+                        {
+                            var message_id = tuple.Item2;
+
+                            var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(message_id);
+                            var something = Uri.EscapeUriString(jobj["message_creative_id"].ToString());
+
+                            await broadcast.SendBroadCastAsync(something, labels.data[i].id);
+                        }
+                    }
                 }
                 return Redirect("https://www.facebook.com/");
             }

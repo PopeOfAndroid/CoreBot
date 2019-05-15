@@ -16,36 +16,6 @@ namespace CoreBot.Controllers
         private readonly string _labelCreateEndpoint = "custom_labels";
         private readonly string _labelMatchEndpoint = "label";
 
-        /*
-        public async Task<Tuple<int, string>> checkIfLabelexists(string accessToken)
-        {
-            string _labelCreate = $"{_facebookAPI}/me/{_labelCreateEndpoint}?access_token={accessToken}";
-
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                LabelModel labelModel = new LabelModel
-                {
-                    name = "test12"
-                };
-
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(labelModel);
-
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var result = httpClient.PostAsync(_labelCreate, content).Result;
-                var httpContent = await result.Content.ReadAsStringAsync();
-
-                return new Tuple<int, string>(
-                    (int)result.StatusCode,
-                    httpContent
-                    );
-            }
-        }
-
-    */
-
         public async Task<Tuple<int, string>> getAllLabels()
         {
             string _getUserLabel = "https://graph.facebook.com/v2.11/me/custom_labels?fields=name&access_token=EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD";
@@ -152,11 +122,8 @@ namespace CoreBot.Controllers
             }
         }
 
-        public async Task<Tuple<int, string>> MatchLabelWithUser(string PSID, string labelIdJson, string accessToken, string user)
+        public async Task<Tuple<int, string>> MatchLabelWithUser(string PSID, string labelId, string accessToken, string user)
         {
-            var jobj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(labelIdJson);
-            var labelId= Uri.EscapeUriString(jobj["id"].ToString());
-
             string _labelMatch = $"{_facebookAPI}/{labelId}/{_labelMatchEndpoint}?access_token={accessToken}";
 
             using (var httpClient = new HttpClient())

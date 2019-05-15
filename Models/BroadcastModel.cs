@@ -9,6 +9,8 @@ namespace CoreBot.Models
     {
         public string message_creative_id { get; set; }
 
+        public string custom_label_id { get; set; }
+
         public string notification_type { get; set; }
 
         public string messaging_type { get; set; }

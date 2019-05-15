@@ -46,7 +46,7 @@ namespace CoreBot.Controllers
             }
         }        
 
-        public async Task<Tuple<int, string>> SendBroadCastAsync(string message_create_id)
+        public async Task<Tuple<int, string>> SendBroadCastAsync(string message_create_id, string custom_label_id)
         {
             using (var httpClient = new HttpClient())
             {
@@ -55,9 +55,10 @@ namespace CoreBot.Controllers
                 SendBroadcastModel broadcastModel = new SendBroadcastModel
                 {
                     message_creative_id = message_create_id,
+                    custom_label_id =  custom_label_id,
                     notification_type = "REGULAR",
                     messaging_type = "MESSAGE_TAG",
-                    tag = "NON_PROMOTIONAL_SUBSCRIPTION",
+                    tag = "NON_PROMOTIONAL_SUBSCRIPTION"
                 };
 
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(broadcastModel);
