@@ -106,7 +106,7 @@ namespace Microsoft.BotBuilderSamples
 
                     case podcastOption:
                         {
-                            var reply = turnContext.Activity.CreateReply($"https://podcast-generationsbilder.podigee.io/5-neue-episode");
+                            var reply = turnContext.Activity.CreateReply($"https://podcast-generationsbilder.podigee.io/");
                             await turnContext.SendActivityAsync(reply);
                             break;
                         }
