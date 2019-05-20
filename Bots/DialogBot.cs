@@ -55,7 +55,7 @@ namespace Microsoft.BotBuilderSamples
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {
-            const string welcomeOption = "Los Gehts";
+            const string welcomeOption = "Los Geht's";
             const string podcastOption = "Zum Podcast";
             const string homePageOption = "Zur Homepage";
 
