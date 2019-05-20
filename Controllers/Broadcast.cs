@@ -83,9 +83,9 @@ namespace CoreBot.Controllers
                 {
 
                     type = "web_url",
-                    url = "https://www.facebook.com/",
-                    title = settings.ButtonText
-                }
+                    url = "https://www.instagram.com/geheime.mentoren/",
+                    title = settings.ButtonTextLive
+                },
             };
         
             Payload payload = new Payload

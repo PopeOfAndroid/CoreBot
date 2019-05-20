@@ -55,7 +55,7 @@ namespace Microsoft.BotBuilderSamples
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {
-            const string welcomeOption = "Get%20Started";
+            const string welcomeOption = "Los Gehts";
             const string podcastOption = "Zum Podcast";
             const string homePageOption = "Zur Homepage";
 
@@ -162,7 +162,7 @@ namespace Microsoft.BotBuilderSamples
                         //10.000 -> maximale Anzahl User für einen Broadcast
                         if (userCounter < 10000)
                         {
-                            await label.MatchLabelWithUser(PSID, labelData.id, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", user);
+                            await label.MatchLabelWithUser(PSID, labelData.id, "EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", user);
                         }
 
                         else
@@ -178,14 +178,14 @@ namespace Microsoft.BotBuilderSamples
         public async void createLabelAsync(string PSID, string labelName, string user)
         {
             Label label = new Label();
-            tuple4 = await label.CreateLabel("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD",labelName);
+            tuple4 = await label.CreateLabel("EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", labelName);
             if ((int)tuple4.Item1 == 200)
             {
                 var labelIdJson = tuple4.Item2;
                 string labelId = Regex.Replace(labelIdJson, "[^.0-9]*", "").ToString();
 
 
-                await label.MatchLabelWithUser(PSID, labelId, "EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", user);
+                await label.MatchLabelWithUser(PSID, labelId, "EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", user);
             }
         }
     }

@@ -47,7 +47,7 @@ namespace CoreBot.Controllers
 
                     for (int i = 0; i < labels.data.Count; i++)
                     {
-                        Broadcast broadcast = new Broadcast("EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD", "572005723217414");
+                        Broadcast broadcast = new Broadcast("EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", "1305977662791020");
                         tuple = await broadcast.CreateBroadCastAsync(settings);
 
                         if ((int)tuple.Item1 == 200)

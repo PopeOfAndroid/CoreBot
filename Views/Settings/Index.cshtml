@@ -71,10 +71,16 @@
                     @Html.ValidationMessageFor(m => m.Message)
                 </div>
 
-                <!-- Name -->
+                <!-- Button Live -->
                 <div class="form-group">
-                    @Html.TextBoxFor(m => m.ButtonText, null, new { placeholder = "Call To Action", @class = "form-control mb-4" })
-                    @Html.ValidationMessageFor(m => m.ButtonText)
+                    @Html.TextBoxFor(m => m.ButtonTextLive, null, new { placeholder = "Call To Action (Live)", @class = "form-control mb-4" })
+                    @Html.ValidationMessageFor(m => m.ButtonTextLive)
+                </div>
+
+                <!-- Button Aufzeichnung -->
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.ButtonTextLive, null, new { placeholder = "Call To Action (Aufzeichnung)", @class = "form-control mb-4" })
+                    @Html.ValidationMessageFor(m => m.ButtonTextAufzeichnung)
                 </div>
 
                 <!-- Subject -->

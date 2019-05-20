@@ -12,7 +12,10 @@ namespace CoreBot.Models
         public string Message { get; set; }
 
         [Required(ErrorMessage = "Bitte gebe ein Call-To-Action ein!")]
-        public string ButtonText { get; set; }
+        public string ButtonTextLive { get; set; }
+
+        [Required(ErrorMessage = "Bitte gebe ein Call-To-Action ein!")]
+        public string ButtonTextAufzeichnung { get; set; } = "Aufzeichnung?";
         public string Url { get; set; }
     }
 }

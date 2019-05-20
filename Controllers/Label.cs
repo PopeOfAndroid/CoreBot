@@ -18,7 +18,7 @@ namespace CoreBot.Controllers
 
         public async Task<Tuple<int, string>> getAllLabels()
         {
-            string _getUserLabel = "https://graph.facebook.com/v2.11/me/custom_labels?fields=name&access_token=EAAFAza2eNqcBANMlxdcXMVDHZCIIEX20QsW1mVbzrXQTqZC9fdV5dZBES09RYthW8PIcrM5EmKykfSIhytxDxmgUbjewmLwBLFRM7lLXZA5ZCorI6BzdliFhs9m41VWZCZA0D5Ez5ZAYTHCPHZAuTcD6OSZA5mBcZAx56FDD8v389egVgZDZD";
+            string _getUserLabel = "https://graph.facebook.com/v2.11/me/custom_labels?fields=name&access_token=EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD";
 
             using (var httpClient = new HttpClient())
             {
