@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -83,7 +83,7 @@ namespace Microsoft.BotBuilderSamples
                     // By default we offer the users different actions that the bot supports, through quick replies.
                     case welcomeOption:
                        {                                               
-                            var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren");
+                            var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren.<br/>Ich freue mich sehr das Du hier bist 😊 <br/><br/>Hier im Messenger bist Du ein Teil von Geheime Mentoren.<br/>Ich nehme Dich hinter die Kulissen mit und gebe Dir Bescheid, sobald ich Live gehe, eine neue Podcastfolge online ist und sonstige Neuigkeiten zum verlauten sind.<br/><br/>Du kannst mir hier direkt auch jederzeit schreiben. Ich melde mich so schnell ich kann bei dir 😊<br/><br/>Kennst Du bereits mein 1.Buch ? :) Ich schenke es allen, die Geheime Mentoren folgen. Auf meiner Homepage kannst Du es dir kostenfrei herunterladen. Bin sehr gespannt, wie es Dir gefällt! :)<br/><br/>Freue mich Dich kennen zu lernen. Alles Liebe<br/><br/>Dein Geheimer Mentor & Größter Fan<br/><br/>Christoph");
                             reply.SuggestedActions = new SuggestedActions()
                             {
                                 Actions = new List<CardAction>()
@@ -128,7 +128,7 @@ namespace Microsoft.BotBuilderSamples
 
         public async Task setLabelAsync(string PSID, string user)
         {
-            //�berpr�ft was das Letzte Label ist
+            //Überprüft was das Letzte Label ist
             Label label = new Label();
             tuple2 = await label.getAllLabels();
 
@@ -159,7 +159,7 @@ namespace Microsoft.BotBuilderSamples
 
                         int userCounter = Convert.ToInt32(counterString);
 
-                        //10.000 -> maximale Anzahl User f�r einen Broadcast
+                        //10.000 -> maximale Anzahl User für einen Broadcast
                         if (userCounter < 10000)
                         {
                             await label.MatchLabelWithUser(PSID, labelData.id, "EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", user);
@@ -174,7 +174,7 @@ namespace Microsoft.BotBuilderSamples
             }
         }
 
-        //labelName = label.data.Count -> z�hlt hoch
+        //labelName = label.data.Count -> zählt hoch
         public async void createLabelAsync(string PSID, string labelName, string user)
         {
             Label label = new Label();
