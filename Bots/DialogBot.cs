@@ -44,6 +44,8 @@ namespace Microsoft.BotBuilderSamples
         private Tuple<int, string> tuple3;
         private Tuple<int, string> tuple4;
 
+        PageSettings pageSettings = new PageSettings();
+
         public DialogBot(ConversationState conversationState, UserState userState, T dialog, ILogger<DialogBot<T>> logger)
         {    
             //old bot
@@ -56,6 +58,7 @@ namespace Microsoft.BotBuilderSamples
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {
             const string welcomeOption = "Los Gehts";
+            const string welcomeOption2 = "Get%20Started";
             const string podcastOption = "Zum Podcast";
             const string homePageOption = "Zur Homepage";
 
@@ -83,7 +86,23 @@ namespace Microsoft.BotBuilderSamples
                     // By default we offer the users different actions that the bot supports, through quick replies.
                     case welcomeOption:
                        {                                               
-                            var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren.<br/>Ich freue mich sehr das Du hier bist 😊 <br/><br/>Hier im Messenger bist Du ein Teil von Geheime Mentoren.<br/>Ich nehme Dich hinter die Kulissen mit und gebe Dir Bescheid, sobald ich Live gehe, eine neue Podcastfolge online ist und sonstige Neuigkeiten zum verlauten sind.<br/><br/>Du kannst mir hier direkt auch jederzeit schreiben. Ich melde mich so schnell ich kann bei dir 😊<br/><br/>Kennst Du bereits mein 1.Buch ? :) Ich schenke es allen, die Geheime Mentoren folgen. Auf meiner Homepage kannst Du es dir kostenfrei herunterladen. Bin sehr gespannt, wie es Dir gefällt! :)<br/><br/>Freue mich Dich kennen zu lernen. Alles Liebe<br/><br/>Dein Geheimer Mentor & Größter Fan<br/><br/>Christoph");
+                            var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren.<br/>Ich freue mich sehr das Du hier bist 😊 <br/><br/>Hier im Messenger bist Du ein Teil von Geheime Mentoren.<br/>Ich nehme Dich hinter die Kulissen mit und gebe Dir Bescheid, sobald ich Live gehe, eine neue Podcastfolge online ist und sonstige Neuigkeiten zum verlauten sind.<br/>Du kannst mir hier direkt auch jederzeit schreiben.Ich melde mich so schnell ich kann bei dir 😊<br/><br/>Kennst Du bereits mein 1.Buch ? :) Ich schenke es allen, die Geheime Mentoren folgen. Auf meiner Homepage kannst Du es dir kostenfrei herunterladen. Bin sehr gespannt, wie es Dir gefällt! :)<br/><br/>Freue mich Dich kennen zu lernen. Alles Liebe<br/><br/>Dein Geheimer Mentor & Größter Fan<br/>Christoph");
+                            reply.SuggestedActions = new SuggestedActions()
+                            {
+                                Actions = new List<CardAction>()
+                                {
+                                    new CardAction() { Title = podcastOption, Type = ActionTypes.PostBack, Value = podcastOption },
+                                    new CardAction() { Title = homePageOption, Type = ActionTypes.PostBack, Value = homePageOption },
+                                },
+                            };
+                            await turnContext.SendActivityAsync(reply);
+                            await setLabelAsync(PSID, userName);
+                            break;
+                        }
+
+                    case welcomeOption2:
+                        {
+                            var reply = turnContext.Activity.CreateReply("Herzlich Willkommen bei Geheime Mentoren.<br/>Ich freue mich sehr das Du hier bist 😊 <br/><br/>Hier im Messenger bist Du ein Teil von Geheime Mentoren.<br/>Ich nehme Dich hinter die Kulissen mit und gebe Dir Bescheid, sobald ich Live gehe, eine neue Podcastfolge online ist und sonstige Neuigkeiten zum verlauten sind.<br/>Du kannst mir hier direkt auch jederzeit schreiben.Ich melde mich so schnell ich kann bei dir 😊<br/><br/>Kennst Du bereits mein 1.Buch ? :) Ich schenke es allen, die Geheime Mentoren folgen. Auf meiner Homepage kannst Du es dir kostenfrei herunterladen. Bin sehr gespannt, wie es Dir gefällt! :)<br/><br/>Freue mich Dich kennen zu lernen. Alles Liebe<br/><br/>Dein Geheimer Mentor & Größter Fan<br/>Christoph");
                             reply.SuggestedActions = new SuggestedActions()
                             {
                                 Actions = new List<CardAction>()
@@ -162,7 +181,7 @@ namespace Microsoft.BotBuilderSamples
                         //10.000 -> maximale Anzahl User für einen Broadcast
                         if (userCounter < 10000)
                         {
-                            await label.MatchLabelWithUser(PSID, labelData.id, "EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", user);
+                            await label.MatchLabelWithUser(PSID, labelData.id, pageSettings.token, user);
                         }
 
                         else
@@ -178,14 +197,14 @@ namespace Microsoft.BotBuilderSamples
         public async void createLabelAsync(string PSID, string labelName, string user)
         {
             Label label = new Label();
-            tuple4 = await label.CreateLabel("EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", labelName);
+            tuple4 = await label.CreateLabel(pageSettings.token, labelName);
             if ((int)tuple4.Item1 == 200)
             {
                 var labelIdJson = tuple4.Item2;
                 string labelId = Regex.Replace(labelIdJson, "[^.0-9]*", "").ToString();
 
 
-                await label.MatchLabelWithUser(PSID, labelId, "EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", user);
+                await label.MatchLabelWithUser(PSID, labelId, pageSettings.token, user);
             }
         }
     }

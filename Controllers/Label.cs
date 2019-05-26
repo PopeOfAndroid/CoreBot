@@ -18,7 +18,8 @@ namespace CoreBot.Controllers
 
         public async Task<Tuple<int, string>> getAllLabels()
         {
-            string _getUserLabel = "https://graph.facebook.com/v2.11/me/custom_labels?fields=name&access_token=EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD";
+            PageSettings pageSettings = new PageSettings();
+            string _getUserLabel = "https://graph.facebook.com/v2.11/me/custom_labels?fields=name&access_token="+pageSettings.token;
 
             using (var httpClient = new HttpClient())
             {
@@ -64,7 +65,9 @@ namespace CoreBot.Controllers
 
         public async Task<Tuple<int, string>> createUserLabelDB(string labelid, string PSID, string user)
         {
-            string _getUserLabel = "https://tommotmotbotapi.herokuapp.com/public/createuser";
+            PageSettings pageSettings = new PageSettings();
+
+            string _getUserLabel = pageSettings.api+"public/createuser";
 
             using (var httpClient = new HttpClient())
             {

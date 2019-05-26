@@ -7,8 +7,8 @@ namespace CoreBot.Models
 {
     public class PageSettings
     {
-        public string PageId { get; set; } = "1305977662791020";
-        public string token { get; set; } = "EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD";
-
+        public string PageId { get; set; } = "572005723217414";
+        public string token { get; set; } = "EAAkmyGZAXK8MBAEtsTz2G4Xe46JSXmlvJ3Bn5hFK8wCTl2ZCVQ0Lmj9ehmwBSIb7lsFoOwHjzYgQsRvHPQOUHbRuoMv8xmBnZCiu0WYopgiXttLfpC157uzEjFroixzYBztaZBjNz06sx87KVD70ldxzMWRf6pa3a2SCZBdvFZCgZDZD";
+        public string api { get; set; } = "https://tommotmot-testbotapi.herokuapp.com/";
     }
 }

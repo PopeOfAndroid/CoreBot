@@ -33,6 +33,8 @@ namespace CoreBot.Controllers
         [HttpPost]
         public async Task<IActionResult> BroadcastAsync(SettingsViewModel settings)
         {
+            PageSettings pageSettings = new PageSettings();
+
             if (ModelState.IsValid)
             {
                 //check welche label es gibt
@@ -47,7 +49,7 @@ namespace CoreBot.Controllers
 
                     for (int i = 0; i < labels.data.Count; i++)
                     {
-                        Broadcast broadcast = new Broadcast("EAAFAza2eNqcBAGIeO8LoxrTQiR7NFFpCqAropg6KHWHjTRHg0Qf5fJFslnaZBr2JLlMhgsujtFaZC8b3QaD2yJVOxsekBo7VgozhbTNHAdZAZAgdiDsjGQvLqYb9qdn8DZBXWzNFTwehLcT5tQXH6sZB8xwFEQFhxcvRoiHpGekQZDZD", "1305977662791020");
+                        Broadcast broadcast = new Broadcast(pageSettings.token, pageSettings.PageId);
                         tuple = await broadcast.CreateBroadCastAsync(settings);
 
                         if ((int)tuple.Item1 == 200)
