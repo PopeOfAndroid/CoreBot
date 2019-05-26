@@ -44,7 +44,7 @@ namespace Microsoft.BotBuilderSamples
         private Tuple<int, string> tuple3;
         private Tuple<int, string> tuple4;
 
-        PageSettings pageSettings = new PageSettings();
+       
 
         public DialogBot(ConversationState conversationState, UserState userState, T dialog, ILogger<DialogBot<T>> logger)
         {    
@@ -57,6 +57,8 @@ namespace Microsoft.BotBuilderSamples
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
         {
+            PageSettings pageSettings = new PageSettings();
+
             const string welcomeOption = "Los Gehts";
             const string welcomeOption2 = "Get%20Started";
             const string podcastOption = "Zum Podcast";
@@ -147,6 +149,8 @@ namespace Microsoft.BotBuilderSamples
 
         public async Task setLabelAsync(string PSID, string user)
         {
+            PageSettings pageSettings = new PageSettings();
+
             //Überprüft was das Letzte Label ist
             Label label = new Label();
             tuple2 = await label.getAllLabels();
@@ -196,6 +200,7 @@ namespace Microsoft.BotBuilderSamples
         //labelName = label.data.Count -> zählt hoch
         public async void createLabelAsync(string PSID, string labelName, string user)
         {
+            PageSettings pageSettings = new PageSettings();
             Label label = new Label();
             tuple4 = await label.CreateLabel(pageSettings.token, labelName);
             if ((int)tuple4.Item1 == 200)
